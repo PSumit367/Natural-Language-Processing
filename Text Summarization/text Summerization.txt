@@ -1,0 +1,47 @@
+Here are the steps to perform text summarization using the NLTK library in Python:
+
+Read Text from File: First, you need to read the text data from a file. You can use Python’s built-in open() function for this1.
+
+with open('sample.txt', 'r') as file:
+    text = file.read()
+
+
+Tokenize the Text: Next, you need to split the text into sentences and words. You can use NLTK’s sent_tokenize() and word_tokenize() functions for this1.
+
+from nltk.tokenize import sent_tokenize, word_tokenize
+sentences = sent_tokenize(text)
+words = word_tokenize(text)
+
+
+Remove Stop Words: Then, you need to remove stop words (commonly used words like ‘is’, ‘the’, ‘a’, etc.) from your list of words1. NLTK has a predefined list of English stop words that you can use.
+
+from nltk.corpus import stopwords
+stop_words = set(stopwords.words('english'))
+words = [word for word in words if word not in stop_words]
+
+
+Create Frequency Table: After that, create a frequency table that keeps track of how often each word appears in the text1.
+
+from collections import defaultdict
+frequency_table = defaultdict(int)
+for word in words:
+    frequency_table[word] += 1
+
+
+Score Sentences: Score each sentence by adding up the frequencies of its words1.
+
+sentence_scores = defaultdict(int)
+for sentence in sentences:
+    for word in word_tokenize(sentence):
+        if word in frequency_table:
+            sentence_scores[sentence] += frequency_table[word]
+
+
+Generate Summary: Finally, generate the summary by selecting the top N highest-scoring sentences1.
+
+import heapq
+summary_sentences = heapq.nlargest(7, sentence_scores, key=sentence_scores.get)
+summary = ' '.join(summary_sentences)
+print(summary)
+
+In this code, replace 'sample.txt' with the path to your text file and adjust the number 7 to control the length of the summary.
